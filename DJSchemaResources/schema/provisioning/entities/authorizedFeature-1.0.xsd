@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://omc.dowjones.com/schema/provisioning/entities/authorizedFeature/v1_0"
+	xmlns:tns="http://omc.dowjones.com/schema/provisioning/entities/authorizedFeature/v1_0"
+	elementFormDefault="qualified">
+
+    <complexType name="AuthorizedFeature">
+    	<sequence>
+    		<element name="applicationName" maxOccurs="1" minOccurs="1"
+    			type="string">
+
+    		</element>
+    		<element name="featureName" maxOccurs="1" minOccurs="1"
+    			type="string">
+
+    		</element>
+
+    	</sequence>
+    </complexType>
+</schema>

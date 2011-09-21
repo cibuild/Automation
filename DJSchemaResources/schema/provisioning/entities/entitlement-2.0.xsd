@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://omc.dowjones.com/schema/provisioning/entities/entitlement/v2_0"
+	  xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="1.0" elementFormDefault="qualified"
+	targetNamespace="http://omc.dowjones.com/schema/provisioning/entities/entitlement/v2_0">
+    <complexType name="Entitlement">
+    	<sequence>
+    		<element name="name" maxOccurs="1" minOccurs="1"
+    			type="string">
+    		</element>
+    		<element name="active" type="boolean" maxOccurs="1"
+    			minOccurs="1"  default="false">
+    		</element>
+               <element name="instrument" maxOccurs="1" minOccurs="0"
+                        type="string">
+                </element>
+    		<element name="feature" maxOccurs="unbounded" minOccurs="0"
+    			type="string">
+				<annotation><appinfo><jxb:property name="features"/></appinfo></annotation>
+    		</element>
+
+    	</sequence>
+    </complexType>
+
+</schema>
