@@ -9,7 +9,7 @@
 	<groupId>com.dowjones.omc.test</groupId>
 	<artifactId>DJSchemaResources</artifactId>
 	<packaging>jar</packaging>
-	<version>1.5-50-SNAPSHOT</version>
+	<version>1.5-51-SNAPSHOT</version>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 	</dependencies>
