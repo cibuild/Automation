@@ -1,0 +1,146 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>com.dowjones.omc.foundation.maven</groupId>
+		<artifactId>parent-pom</artifactId>
+		<version>1.0-0</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.dowjones.omc.test</groupId>
+	<artifactId>DJSchemaResources</artifactId>
+	<packaging>jar</packaging>
+	<version>1.5-50-SNAPSHOT</version>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/schema</directory>
+				<includes>
+					<include>**/common/**</include>
+					<include>**/provisioning/**</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-djeclipse-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<projectnatures>
+					</projectnatures>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>djeclipse</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>${basedir}/schema</directory>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>scmExternal</id>
+			<build>
+			<plugins>
+			      <plugin>
+			        <groupId>org.apache.maven.plugins</groupId>
+			        <artifactId>maven-antrun-plugin</artifactId>
+			        <executions>
+			           <execution>		
+			             <id>svnexternal</id>
+					 <phase>validate</phase>
+			             <configuration>
+			             <tasks>	
+					<property file="${basedir}/release.properties" />		
+					<echo message="Tag Base: ${tagBase}" />
+					<property name="release.version" value="project.rel.${groupId}:${artifactId}" />
+					<echo message="Generated Tag: ${tagBase}/${artifactId}-${project.rel.${groupId}:${artifactId}}" />
+					<echo message="Release No.: ${svn.release}" />
+					<delete dir="${basedir}/${svn.tmp}/${svn.release}" />
+					<mkdir dir="${basedir}/${svn.tmp}" />
+					<echo message="Running svn checkout ${tagBase}/${svn.release} ${basedir}/${svn.tmp}/${svn.release}" />
+			            <exec executable="${SVN}" dir="${basedir}/${svn.tmp}">
+			               <arg value="co" />
+					   <arg value="-N" />
+			               <arg value="${tagBase}/${svn.release}" />
+					   <arg value="${basedir}/${svn.tmp}/${svn.release}" />
+			             </exec>
+					 <echo message="Propset" />
+			             <exec executable="${SVN}" dir="${basedir}/${svn.tmp}">
+			               <arg value="propset" />
+					   <arg value="svn:externals" />
+					   <arg value="${project.artifactId} ${tagBase}/${artifactId}-${project.rel.${groupId}:${artifactId}}" />
+					   <arg value="${basedir}/${svn.tmp}/${svn.release}" />
+			             </exec>
+					 <echo message="Commiting ${svn.release} changes" />
+			             <exec executable="${SVN}" dir="${basedir}/${svn.tmp}/${svn.release}">
+			               <arg value="commit" />
+			               <arg value="-m 'Tag ${tagBase}/${artifactId}-${project.rel.${groupId}:${artifactId}} is now set as the ${svn.release} external'" />
+										<arg value="--username=${scm.username}" />
+                                                                                <arg value="--password=${scm.password}" />
+                                                                                <arg value="--no-auth-cache" />
+                                                                                <arg value="--non-interactive" />
+
+			             </exec>
+					<delete dir="${basedir}/${svn.tmp}/${svn.release}" />		
+		              </tasks>
+		             </configuration>
+		             <goals>
+			           <goal>run</goal>
+		             </goals>
+		          </execution>
+		        </executions>
+		      </plugin>
+		</plugins>	
+		</build>
+		</profile>
+               <profile>
+                        <id>validatePOMscm</id>
+                        <build>
+                                <plugins>
+                                        <plugin>
+                                                <groupId>org.apache.maven.plugins</groupId>
+                                                <artifactId>maven-antrun-plugin</artifactId>
+                                                <executions>
+                                                        <execution>
+                                                                <id>validatePOMscm</id>
+                                                                <phase>validate</phase>
+                                                                <configuration>
+                                                                        <tasks>
+                                                                        <echo message="basedir: ${basedir}" />
+                                                                        <echo message="project.scm.connection: ${project.scm.connection}" />
+                                                                         <echo message="project.scm.developerConnection: ${project.scm.developerConnection}" />
+                                                                         <echo message="project.scm.url: ${project.scm.url}" />
+                                                                        <exec executable="bash" failonerror="true">
+                                                                                <arg value="/opt/mosaic-ciworkspace/validatePOMscm.sh" />
+                                                                                <arg value="${basedir}" />
+                                                                                <arg value="${project.scm.connection}" />
+                                                                                <arg value="${project.scm.developerConnection}" />
+                                                                                <arg value="${project.scm.url}" />
+                                                                        </exec>
+                                                                        </tasks>
+                                                                </configuration>
+                                                                <goals>
+                                                                        <goal>run</goal>
+                                                                </goals>
+                                                        </execution>
+                                                </executions>
+                                        </plugin>
+                                </plugins>
+                        </build>
+                </profile>
+	</profiles>
+	<scm>
+		<connection>scm:svn:https://svnsb.win.dowjones.net/commerce-foundation/foundation/maven/sandbox/gandhip/DJSchemaResources/trunk</connection>
+		<developerConnection>scm:svn:https://svnsb.win.dowjones.net/commerce-foundation/foundation/maven/sandbox/gandhip/DJSchemaResources/trunk</developerConnection>
+		<url>https://svnsb.win.dowjones.net/commerce-foundation/foundation/maven/sandbox/gandhip/DJSchemaResources/trunk</url>
+	</scm>
+</project>
