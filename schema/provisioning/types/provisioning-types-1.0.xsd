@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema"
-		xmlns:tns="http://omc.dowjones.com/schema/provisioning/types/v1_0"
-		targetNamespace="http://omc.dowjones.com/schema/provisioning/types/v1_0">
-
-</schema>
